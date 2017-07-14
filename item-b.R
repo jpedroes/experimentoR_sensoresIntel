@@ -2,7 +2,7 @@ dados = converte(read.table("subsfin.txt"))
 locs = converte(read.table("mote_locs.txt")[,2:3])
 locs=locs[c(-5,-15),]
 
-result_regLin1 = eco_p(0.1, 1)
+#result_regLin1 = eco_p(0.1, 1)
 result_regLin2 = eco_p(0.2, 1)
 result_regLin3 = eco_p(0.3, 1)
 result_regLin4 = eco_p(0.4, 1)
@@ -10,20 +10,35 @@ result_regLin5 = eco_p(0.5, 1)
 result_regLin6 = eco_p(0.6, 1)
 result_regLin7 = eco_p(0.7, 1)
 result_regLin8 = eco_p(0.8, 1)
-result_regLin9 = eco_p(0.9, 1)
+#result_regLin9 = eco_p(0.9, 1)
 #result_regLin = eco_p(1, 1)
 
-plot(erromedio(erromedio(result_regLin1), dados), type="l", col="blue", ylim=c(0,25))
+plot(erromedio(result_regLin2, dados), type="l", col="blue", ylim=c(0,01))
+lines(erromedio(result_regLin3, dados), type="l", pch=22, lty=2, col="yellow")
+lines(erromedio(result_regLin4, dados), type="l", pch=22, lty=2, col="black")
+lines(erromedio(result_regLin5, dados), type="l", pch=22, lty=2, col="red")
+lines(erromedio(result_regLin6, dados), type="l", pch=22, lty=2, col="green")
+lines(erromedio(result_regLin7, dados), type="l", pch=22, lty=2, col="pink")
+lines(erromedio(result_regLin8, dados), type="l", pch=22, lty=2, col="orange")
 
-lines(erromin(erromedio(result_regLin2), dados), type="l", pch=22, lty=2, col="red")
+result_kri2 = eco_p(0.2, 4)
+result_kir3 = eco_p(0.3, 4)
+result_kri4 = eco_p(0.4, 4)
+result_kri5 = eco_p(0.5, 4)
+result_kri6 = eco_p(0.6, 4)
+result_kri7 = eco_p(0.7, 4)
+result_kri8 = eco_p(0.8, 4)
+print(1)
 
-lines(erromax(erromedio(result_regLin3), dados), type="l", pch=22, lty=2, col="yellow")
-lines(erromax(erromedio(result_regLin4), dados), type="l", pch=22, lty=2, col="black")
-lines(erromax(erromedio(result_regLin5), dados), type="l", pch=22, lty=2, col="brow")
-lines(erromax(erromedio(result_regLin6), dados), type="l", pch=22, lty=2, col="lilac")
-lines(erromax(erromedio(result_regLin7), dados), type="l", pch=22, lty=2, col="pink")
-lines(erromax(erromedio(result_regLin8), dados), type="l", pch=22, lty=2, col="orange")
-lines(erromax(erromedio(result_regLin9), dados), type="l", pch=22, lty=2, col="green")
+
+result_rbf2 = eco_p(0.2, 2)
+result_rbf3 = eco_p(0.3, 2)
+result_rbf4 = eco_p(0.4, 2)
+result_rbf5 = eco_p(0.5, 2)
+result_rbf6 = eco_p(0.6, 2)
+result_rbf7 = eco_p(0.7, 2)
+result_rbf8 = eco_p(0.8, 2)
+print(1)
 
 #==============================================================
 
@@ -76,6 +91,9 @@ eco_p = function(p, type){
 		dt_epoca = c()
 		count = 0
 		for(j in 1:ncol(dados)){
+			if(length(dt_epoca) > 48){
+				j = ncol(dados)+1
+			}
 			if(runif(1) < p){
 				count = count + 1
 				dt_epoca[count] = j
@@ -83,8 +101,8 @@ eco_p = function(p, type){
 			if(length(dt_epoca)<1){
 				dt_epoca[1] = sample(1:52, 1)
 			}
+
 		}
-		print(dt_epoca)
 		if(type == 1){
 			result[i,] = regLin_p(dt_epoca, sensores, dados[i,])
 			
@@ -105,12 +123,12 @@ eco_p = function(p, type){
 regLin_p = function(dt_epoca, sensores, dados){
 
 	result = array(0, dim = length(dados))
-	X = matrix(1, ncol = 3, nrow = nrow(locs))
-	X[,2] = locs[,1]
-	X[,3] = locs[,2]
+	X = matrix(1, ncol = 3, nrow = nrow(sensores))
+	X[,2] = sensores[,1]
+	X[,3] = sensores[,2]
 
 	if(length(dt_epoca) == length(dados)){
-		result = dados
+		return (dados)
 	}
 	else{
 		for(i in 1:length(result)){
@@ -124,9 +142,7 @@ regLin_p = function(dt_epoca, sensores, dados){
 			}
 		}
 	}	
-
 	return(result)
-
 }
 
 regRbf_p = function(dt_epoca, sensores, dados){
@@ -137,7 +153,7 @@ regRbf_p = function(dt_epoca, sensores, dados){
 
 	for(i in 1:nrow(H)){
 		for (j in 1:nrow(H)) {
-			H[i,j+1] = exp(-s*((locs[j,1] - locs[i,1])^2 + (locs[j,2] - locs[i,2])^2)) 
+			H[i,j+1] = exp(-s*((sensores[j,1] - sensores[i,1])^2 + (sensores[j,2] - sensores[i,2])^2)) 
 		}
 	}
 
@@ -157,7 +173,7 @@ regRbf_p = function(dt_epoca, sensores, dados){
 	return(result)
 }
 
-resultado_smooth = function(dt_epoca, sensores, dados){
+regSmo_p = function(dt_epoca, sensores, dados){
 	dst = matrix(0, nrow = nrow(sensores), ncol = nrow(sensores))
 	dst = dist(sensores, diag=TRUE, upper=TRUE)
 	dst = as.matrix(dst)
@@ -176,7 +192,7 @@ resultado_smooth = function(dt_epoca, sensores, dados){
 	return (result)
 }
 
-resultado_krigen = function(dt_epoca, sensores, dados){
+regKri_p = function(dt_epoca, sensores, dados){
 	#library("SpatialExtremes")
 	#result = matrix(0, nrow = nrow(dados), ncol = ncol(dados))
 	result = array(0, dim = length(dados))
