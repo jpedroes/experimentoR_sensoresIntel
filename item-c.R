@@ -14,9 +14,9 @@ for(i in (nrow(locs)+1):nrow(sensores)){
 }
 
 dados_rgl = complete_rgl(sensores, dados, locs)
-dados_rbf = complete_rgl(sensores, dados, locs)
-dados_smo = complete_rgl(sensores, dados, locs)
-dados_krig = complete_rgl(sensores, dados, locs)
+dados_rbf = complete_rbf(sensores, dados, locs)
+dados_smo = complete_smo(sensores, dados, locs)
+dados_krig = complete_krig(sensores, dados, locs)
 	
 result_regLin2 = eco_p(0.2, 1, dados_rgl)
 result_regLin3 = eco_p(0.3, 1, dados_rgl)
@@ -25,7 +25,6 @@ result_regLin5 = eco_p(0.5, 1, dados_rgl)
 result_regLin6 = eco_p(0.6, 1, dados_rgl)
 result_regLin7 = eco_p(0.7, 1, dados_rgl)
 result_regLin8 = eco_p(0.8, 1, dados_rgl)
-
 
 #++++++++++++++++++PREENCHENDO OS 100 PONTOS ALEATORIOS++++++++
 
@@ -51,7 +50,7 @@ complete_rgl = function(sensores, dados, locs){
 }
 
 
-complete_rgl = function(sensores, dados, locs){
+complete_rbf = function(sensores, dados, locs){
 	#result = matrix(0, nrow = nrow(dados), ncol = ncol(dados))
 	result = matrix(0, nrow = nrow(dados), ncol = nrow(sensores))
 	result[1:nrow(dados), 1:ncol(dados)] = dados
@@ -90,6 +89,7 @@ complete_kri = function(sensores, dados, locs){
 			 cov.mod = "powexp", sill = 1, range = 10, smooth = 0.75)
 			result[i,j] = krig$krig.est
 		}
+		print(i*j)
 	}
 
 	return(result)
