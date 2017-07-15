@@ -171,7 +171,7 @@ eco_p = function(p, type, sensores, dados){
 		dt_epoca = c()
 		count = 0
 		for(j in 1:ncol(dados)){
-			if(length(dt_epoca) > 48){
+			if(length(dt_epoca) > 148){
 				j = ncol(dados)+1
 			}
 			if(runif(1) < p){
