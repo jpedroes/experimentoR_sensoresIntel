@@ -16,7 +16,7 @@ for(i in (nrow(locs)+1):nrow(sensores)){
 dados_rgl = complete_rgl(sensores, dados, locs)
 dados_rbf = complete_rbf(sensores, dados, locs)
 dados_smo = complete_smo(sensores, dados, locs)
-dados_krig = complete_krig(sensores, dados, locs)
+dados_kri = complete_krig(sensores, dados, locs)
 
 
 	
@@ -35,7 +35,54 @@ result_rbf5 = eco_p(0.5, 2,sensores, dados_rbf)
 result_rbf6 = eco_p(0.6, 2,sensores, dados_rbf)
 result_rbf7 = eco_p(0.7, 2, sensores,dados_rbf)
 result_rbf8 = eco_p(0.8, 2, sensores,dados_rbf)
-print(1)
+
+result_smo2 = eco_p(0.2, 3,sensores, dados_smo)
+result_smo3 = eco_p(0.3, 3,sensores, dados_smo)
+result_smo4 = eco_p(0.4, 3,sensores, dados_smo)
+result_smo5 = eco_p(0.5, 3,sensores, dados_smo)
+result_smo6 = eco_p(0.6, 3,sensores, dados_smo)
+result_smo7 = eco_p(0.7, 3, sensores,dados_smo)
+result_smo8 = eco_p(0.8, 3, sensores,dados_smo)
+
+result_kri2 = eco_p(0.2, 4,sensores, dados_kri)
+result_kri3 = eco_p(0.3, 4,sensores, dados_kri)
+result_kri4 = eco_p(0.4, 4,sensores, dados_kri)
+result_kri5 = eco_p(0.5, 4,sensores, dados_kri)
+result_kri6 = eco_p(0.6, 4,sensores, dados_kri)
+result_kri7 = eco_p(0.7, 4, sensores,dados_kri)
+result_kri8 = eco_p(0.8, 4, sensores,dados_kri)
+
+plot(erromedio(result_regLin2, dados), type="l", col="blue", ylim=c(0,01))
+lines(erromedio(result_regLin3, dados), type="l", pch=22, lty=2, col="yellow")
+lines(erromedio(result_regLin4, dados), type="l", pch=22, lty=2, col="black")
+lines(erromedio(result_regLin5, dados), type="l", pch=22, lty=2, col="red")
+lines(erromedio(result_regLin6, dados), type="l", pch=22, lty=2, col="green")
+lines(erromedio(result_regLin7, dados), type="l", pch=22, lty=2, col="pink")
+lines(erromedio(result_regLin8, dados), type="l", pch=22, lty=2, col="orange")
+
+plot(erromedio(result_kri2, dados), type="l", col="blue", ylim=c(0,10))
+lines(erromedio(result_kri3, dados), type="l", pch=22, lty=2, col="yellow")
+lines(erromedio(result_kri4, dados), type="l", pch=22, lty=2, col="black")
+lines(erromedio(result_kri5, dados), type="l", pch=22, lty=2, col="red")
+lines(erromedio(result_kri6, dados), type="l", pch=22, lty=2, col="green")
+lines(erromedio(result_kri7, dados), type="l", pch=22, lty=2, col="pink")
+lines(erromedio(result_kri8, dados), type="l", pch=22, lty=2, col="orange")
+
+plot(erromedio(result_rbf2, dados), type="l", col="blue", ylim=c(0,300))
+lines(erromedio(result_rbf3, dados), type="l", pch=22, lty=2, col="yellow")
+lines(erromedio(result_rbf4, dados), type="l", pch=22, lty=2, col="black")
+lines(erromedio(result_rbf5, dados), type="l", pch=22, lty=2, col="red")
+lines(erromedio(result_rbf6, dados), type="l", pch=22, lty=2, col="green")
+lines(erromedio(result_rbf7, dados), type="l", pch=22, lty=2, col="pink")
+lines(erromedio(result_rbf8, dados), type="l", pch=22, lty=2, col="orange")
+
+plot(erromedio(result_smo2, dados), type="l", col="blue", ylim=c(0,10))
+lines(erromedio(result_smo3, dados), type="l", pch=22, lty=2, col="yellow")
+lines(erromedio(result_smo4, dados), type="l", pch=22, lty=2, col="black")
+lines(erromedio(result_smo5, dados), type="l", pch=22, lty=2, col="red")
+lines(erromedio(result_smo6, dados), type="l", pch=22, lty=2, col="green")
+lines(erromedio(result_smo7, dados), type="l", pch=22, lty=2, col="pink")
+lines(erromedio(result_smo8, dados), type="l", pch=22, lty=2, col="orange")
 
 #++++++++++++++++++PREENCHENDO OS 100 PONTOS ALEATORIOS++++++++
 
@@ -196,6 +243,7 @@ eco_p = function(p, type, sensores, dados){
 		if(type == 4){
 			result[i,] = regKri_p(dt_epoca, sensores, dados[i,])
 		}
+		print(i*j)
 	}
 	return(result)
 }
@@ -248,7 +296,6 @@ regRbf_p = function(dt_epoca, sensores, dados){
 			Hj = H[i, -(nt)]
 			result[i]= Hj %*% alphaj
 		}
-		print(i*j)
 	}
 
 	return(result)
