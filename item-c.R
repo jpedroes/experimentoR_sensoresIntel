@@ -17,6 +17,8 @@ dados_rgl = complete_rgl(sensores, dados, locs)
 dados_rbf = complete_rbf(sensores, dados, locs)
 dados_smo = complete_smo(sensores, dados, locs)
 dados_krig = complete_krig(sensores, dados, locs)
+
+
 	
 result_regLin2 = eco_p(0.2, 1, dados_rgl)
 result_regLin3 = eco_p(0.3, 1, dados_rgl)
@@ -25,6 +27,15 @@ result_regLin5 = eco_p(0.5, 1, dados_rgl)
 result_regLin6 = eco_p(0.6, 1, dados_rgl)
 result_regLin7 = eco_p(0.7, 1, dados_rgl)
 result_regLin8 = eco_p(0.8, 1, dados_rgl)
+
+result_rbf2 = eco_p(0.2, 2,sensores, dados_rbf)
+result_rbf3 = eco_p(0.3, 2,sensores, dados_rbf)
+result_rbf4 = eco_p(0.4, 2,sensores, dados_rbf)
+result_rbf5 = eco_p(0.5, 2,sensores, dados_rbf)
+result_rbf6 = eco_p(0.6, 2,sensores, dados_rbf)
+result_rbf7 = eco_p(0.7, 2, sensores,dados_rbf)
+result_rbf8 = eco_p(0.8, 2, sensores,dados_rbf)
+print(1)
 
 #++++++++++++++++++PREENCHENDO OS 100 PONTOS ALEATORIOS++++++++
 
@@ -222,7 +233,7 @@ regRbf_p = function(dt_epoca, sensores, dados){
 
 	for(i in 1:nrow(H)){
 		for (j in 1:nrow(H)) {
-			H[i,j+1] = exp(-s*((locs[j,1] - locs[i,1])^2 + (locs[j,2] - locs[i,2])^2)) 
+			H[i,j+1] = exp(-s*((sensores[j,1] - sensores[i,1])^2 + (sensores[j,2] - sensores[i,2])^2)) 
 		}
 	}
 
@@ -237,12 +248,13 @@ regRbf_p = function(dt_epoca, sensores, dados){
 			Hj = H[i, -(nt)]
 			result[i]= Hj %*% alphaj
 		}
+		print(i*j)
 	}
 
 	return(result)
 }
 
-resultado_smooth = function(dt_epoca, sensores, dados){
+regSmo_p = function(dt_epoca, sensores, dados){
 	dst = matrix(0, nrow = nrow(sensores), ncol = nrow(sensores))
 	dst = dist(sensores, diag=TRUE, upper=TRUE)
 	dst = as.matrix(dst)
@@ -261,7 +273,7 @@ resultado_smooth = function(dt_epoca, sensores, dados){
 	return (result)
 }
 
-resultado_krigen = function(dt_epoca, sensores, dados){
+regKri_p = function(dt_epoca, sensores, dados){
 	#library("SpatialExtremes")
 	#result = matrix(0, nrow = nrow(dados), ncol = ncol(dados))
 	result = array(0, dim = length(dados))
